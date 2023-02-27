@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Description;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "product")
@@ -12,6 +14,7 @@ public class Product {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String imagePath;
+    @Size(min = 3, max = 30)
     private String name;
     private Double price;
     private String description;

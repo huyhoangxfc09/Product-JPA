@@ -5,10 +5,12 @@ import com.example.product.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -29,11 +31,25 @@ public class ProductController {
         modelAndView.addObject("create","create");
         return modelAndView;
     }
+//    @PostMapping("/create")
+//    private String createProduct(@ModelAttribute Product product, RedirectAttributes attributes){
+//        iProductService.save(product);
+//        attributes.addFlashAttribute("message","Tạo mới thành công");
+//        return "redirect:/products";
+//    }
     @PostMapping("/create")
-    private String createClassroom(@ModelAttribute Product product, RedirectAttributes attributes){
-        iProductService.save(product);
-        attributes.addFlashAttribute("message","Tạo mới thành công");
-        return "redirect:/products";
+    private String createProduct(@Valid @ModelAttribute Product product,
+                                 RedirectAttributes attributes,
+                                 BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            attributes.addFlashAttribute("product",product);
+            return "redirect:/form";
+        }else {
+            iProductService.save(product);
+            attributes.addFlashAttribute("message","Tạo mới thành công");
+            return "redirect:/products";
+        }
+
     }
     @GetMapping("/update/{id}")
     private ModelAndView updateForm(@PathVariable("id")Long id){
@@ -49,7 +65,7 @@ public class ProductController {
         return "redirect:/products";
     }
     @GetMapping("/delete/{id}")
-    private String deleteClassroom(@PathVariable("id")Long id){
+    private String deleteProduct(@PathVariable("id")Long id){
         iProductService.remove(id);
         return "redirect:/products";
     }

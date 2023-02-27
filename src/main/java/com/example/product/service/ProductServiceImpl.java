@@ -50,6 +50,6 @@ public class ProductServiceImpl implements IProductService{
     }
     @Override
     public List<Product> searchByName(String name){
-        return iProductRepository.findByName("%"+name+"%");
+            return iProductRepository.findByName("%"+name+"%");
     }
 }
